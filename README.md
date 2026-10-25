@@ -1,0 +1,2 @@
+# AutoLux
+Mashina-sotib-olish
