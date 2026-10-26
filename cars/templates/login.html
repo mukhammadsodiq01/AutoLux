@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Kirish — AutoLux{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+    <div class="container">
+        <div class="auth-shell">
+
+            <div class="auth-copy">
+                <p class="auth-tag">AutoLux hisobi</p>
+                <h1>Mashinangizni tanlang, <span>bir zumda</span> xarid qiling.</h1>
+                <p>Hisobingizga kiring, mashinani tanlang va to'lovni bir necha daqiqada yakunlang.</p>
+                <div class="auth-points">
+                    <div><strong>6</strong><span>mashina</span></div>
+                    <div><strong>3</strong><span>kategoriya</span></div>
+                    <div><strong>24/7</strong><span>qulaylik</span></div>
+                </div>
+            </div>
+
+            <div class="auth-card">
+                <h2>Kirish</h2>
+                <p>Hisobingizga kiring va xaridni davom ettiring.</p>
+
+                <form method="post" id="loginForm">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="next" value="{{ next }}">
+
+                    <button type="button" class="btn-demo" id="demoFill">Demo account bilan kirish</button>
+                    <div class="auth-divider"><span>yoki o'z hisobingiz</span></div>
+
+                    <div class="field">
+                        <label for="{{ form.username.id_for_label }}">Foydalanuvchi nomi</label>
+                        {{ form.username }}
+                        {{ form.username.errors }}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form.password.id_for_label }}">Parol</label>
+                        <div class="password-wrap">
+                            {{ form.password }}
+                            <button type="button" class="password-toggle" data-target="id_password">Ko'rsatish</button>
+                        </div>
+                        {{ form.password.errors }}
+                    </div>
+
+                    {% if form.non_field_errors %}
+
+                    <div class="form-error">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <button type="submit" class="btn">Kirish</button>
+                </form>
+
+                <p class="auth-switch">Hisobingiz yo'qmi? <a href="{% url 'register' %}">Ro'yxatdan o'ting</a></p>
+                <p class="auth-hint">Demo: <code>demo</code> / <code>demo12345</code></p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    const loginUsername = document.getElementById("id_username");
+    const loginPassword = document.getElementById("id_password");
+    if (loginUsername) loginUsername.placeholder = "Foydalanuvchi nomi";
+    if (loginPassword) loginPassword.placeholder = "Parol";
+
+    const demoButton = document.getElementById("demoFill");
+    const loginForm = document.getElementById("loginForm");
+    if (demoButton && loginForm && loginUsername && loginPassword) {
+        demoButton.addEventListener("click", () => {
+            loginUsername.value = "demo";
+            loginPassword.value = "demo12345";
+            loginForm.requestSubmit();
+        });
+    }
+
+    document.querySelectorAll(".password-toggle").forEach((button) => {
+        button.addEventListener("click", () => {
+            const input = document.getElementById(button.dataset.target);
+            if (!input) return;
+            const isHidden = input.type === "password";
+            input.type = isHidden ? "text" : "password";
+            button.textContent = isHidden ? "Yashirish" : "Ko'rsatish";
+        });
+    });
+</script>
+
+{% endblock %}

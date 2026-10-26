@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}To'lov muvaffaqiyatli — AutoLux{% endblock %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+        <div class="success-wrap">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5"/>
+                </svg>
+            </div>
+
+            <h1>To'lov muvaffaqiyatli amalga oshirildi!</h1>
+            <p class="success-text">Xaridingiz uchun rahmat! Tez orada mutaxassislarimiz siz bilan bog'lanadi.</p>
+
+            <div class="receipt">
+                <div class="receipt-row">
+                    <span>Buyurtma raqami</span>
+                    <strong>#{{ order.id }}</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Mashina</span>
+                    <strong>{{ order.car.brand }} {{ order.car.name }}</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Xaridor</span>
+                    <strong>{{ order.full_name }}</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Telefon</span>
+                    <strong>{{ order.phone }}</strong>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Karta</span>
+                    <strong>**** **** **** {{ order.card_number|slice:"-4:" }}</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>To'langan summa</span>
+                    <strong>$ {{ order.car.price|intcomma }}</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Sana</span>
+                    <strong>{{ order.created_at|date:"d.m.Y H:i" }}</strong>
+                </div>
+            </div>
+
+            <div class="success-actions">
+                <a href="/" class="btn">Bosh sahifa</a>
+                <a href="/" class="btn-outline">Mashinalar</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

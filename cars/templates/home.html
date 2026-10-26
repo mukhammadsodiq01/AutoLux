@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}AutoLux — Mashina sotish{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container">
+        <p class="hero-tag">Premium avtosalon</p>
+        <h1>Orzuingizdagi mashinani <span>bugun</span> toping</h1>
+        <p class="hero-text">Eng saralangan va ishonchli mashinalar. O'zingizga mosini tanlang va bir necha daqiqada onlayn sotib oling.</p>
+
+        <form class="search-box" action="/" method="get">
+            <input type="text" name="q" value="{{ query }}" placeholder="Mashina nomi yoki markasi...">
+            <button type="submit">Qidirish</button>
+        </form>
+
+        <div class="hero-stats">
+            <div>
+                <strong>150+</strong>
+                <span>Mashina</span>
+            </div>
+            <div>
+                <strong>1200+</strong>
+                <span>Xaridor</span>
+            </div>
+            <div>
+                <strong>5 yil</strong>
+                <span>Kafolat</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="cars">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <h2>Mashinalarimiz</h2>
+                <p>Har bir mashina tekshirilgan va kafolatlangan</p>
+            </div>
+            <a href="/?page=1" class="section-link">Barchasini ko'rish</a>
+        </div>
+
+        <div class="categories">
+            <a href="/?page=1" class="category-link {% if active_category == 0 %}active{% endif %}">Barchasi</a>
+            {% for category in categories %}
+            <a href="/?category={{ category.id }}" class="category-link {% if active_category == category.id %}active{% endif %}">{{ category.name }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="cars-grid">
+
+            {% for car in cars %}
+            <article class="car-card">
+                <div class="car-image">
+
+                    <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.name }}">
+                    <span class="car-badge">{{ car.year|date:"Y" }}</span>
+                </div>
+                <div class="car-body">
+                    <h3>{{ car.brand }} {{ car.name }}</h3>
+                    <div class="car-specs">
+                        <span>{{ car.year|date:"Y" }}</span>
+                        <span>{{ car.mileage|intcomma }} km</span>
+                        <span>{{ car.fuel }}</span>
+
+                        {% if car.category %}<span>{{ car.category.name }}</span>{% endif %}
+                    </div>
+                    <div class="car-footer">
+                        <p class="car-price">$ {{ car.price|intcomma }}</p>
+
+                        <a href="{% url 'car_detail' car.id %}" class="btn-small">Batafsil</a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+
+            <p class="empty">Hech narsa topilmadi. Boshqa nom bilan qidirib ko'ring.</p>
+            {% endfor %}
+
+        </div>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="pagination" aria-label="Sahifalar">
+
+            {% if page_obj.has_previous %}
+            <a class="page-link" href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.previous_page_number }}">← Oldingi</a>
+            {% else %}
+            <span class="page-link disabled">← Oldingi</span>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="page-link active" aria-current="page">{{ num }}</span>
+                {% else %}
+                <a class="page-link" href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a class="page-link" href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.next_page_number }}">Keyingi →</a>
+            {% else %}
+            <span class="page-link disabled">Keyingi →</span>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section" id="about">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <h2>Nega bizni tanlashadi?</h2>
+                <p>Qulaylik va ishonch — bizning asosiy tamoyilimiz</p>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/>
+                    </svg>
+                </div>
+                <h3>Kafolat</h3>
+                <p>Har bir mashina to'liq tekshiruvdan o'tgan va rasmiy kafolatga ega.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="5" width="18" height="14" rx="2"/>
+                        <path d="M3 10h18"/>
+                    </svg>
+                </div>
+                <h3>Qulay to'lov</h3>
+                <p>Mashinani uydan chiqmasdan, oddiy karta orqali sotib olishingiz mumkin.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 13v-1a8 8 0 0116 0v1"/>
+                        <rect x="2" y="13" width="4" height="6" rx="1"/>
+                        <rect x="18" y="13" width="4" height="6" rx="1"/>
+                    </svg>
+                </div>
+                <h3>Yordam</h3>
+                <p>Savolingiz bo'lsa, mutaxassislarimiz doim aloqada bo'ladi.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var params = new URLSearchParams(window.location.search);
+        var targetId = "";
+
+        if (params.get("section") === "about") {
+            targetId = "about";
+        } else if (params.has("category") || params.has("page") || params.has("q")) {
+            targetId = "cars";
+        }
+
+        if (targetId) {
+            var target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: "auto", block: "start" });
+            }
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}To'lov — AutoLux{% endblock %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <a href="{% url 'car_detail' car.id %}" class="back-link">← Mashina sahifasiga qaytish</a>
+
+        <div class="payment-grid">
+            <div class="order-card">
+                <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.name }}">
+                <div class="order-body">
+                    <h3>{{ car.brand }} {{ car.name }}</h3>
+                    <p class="order-meta">{{ car.year|date:"Y" }} • {{ car.mileage|intcomma }} km • {{ car.fuel }}</p>
+                    <div class="order-total">
+                        <span>Jami summa</span>
+                        <strong>$ {{ car.price|intcomma }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2>To'lov ma'lumotlari</h2>
+                <p>Ma'lumotlarni to'ldiring va xaridni yakunlang.</p>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    {% for error in errors %}
+                        <div class="form-error">{{ error }}</div>
+                    {% endfor %}
+
+                    <div class="field">
+                        <label for="full_name">Ism va familiya</label>
+                        <input type="text" id="full_name" name="full_name" placeholder="Aliyev Vali" value="{{ full_name }}" pattern="[A-Za-zÀ-ÿĀ-ž' -]+" maxlength="100" title="Faqat harflar" required>
+                        <p class="helptext">Faqat harflardan iborat bo'lishi kerak.</p>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Telefon raqami</label>
+                        <input type="text" id="phone" name="phone" placeholder="9989012345678" value="{{ phone }}" inputmode="numeric" pattern="[0-9]{13}" minlength="13" maxlength="13" title="13 ta raqam" required>
+                        <p class="helptext">13 ta raqam, masalan: 9989012345678</p>
+                    </div>
+
+                    <div class="field">
+                        <label for="card_number">Karta raqami</label>
+                        <input type="text" id="card_number" name="card_number" placeholder="8600123456789012" value="{{ card_number }}" inputmode="numeric" pattern="[0-9]{16}" minlength="16" maxlength="16" title="16 ta raqam" required>
+                        <p class="helptext">16 ta raqam, masalan: 8600123456789012</p>
+                    </div>
+
+                    <button type="submit" class="btn">Sotib olish</button>
+                </form>
+
+                <p class="secure-text">To'lov ma'lumotlaringiz xavfsiz saqlanadi</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

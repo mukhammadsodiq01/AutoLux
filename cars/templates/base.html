@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}AutoLux{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
+</head>
+<body>
+
+<header class="header">
+    <div class="container header-inner">
+
+        <a href="/" class="logo">Auto<span>Lux</span></a>
+
+        <nav class="nav">
+            <a href="/">Bosh sahifa</a>
+            <a href="/?page=1">Mashinalar</a>
+            <a href="/?section=about">Biz haqimizda</a>
+        </nav>
+
+        <div class="header-actions">
+
+            <a href="tel:+998901234567" class="header-phone">+998 90 123 45 67</a>
+
+            {% if user.is_authenticated %}
+
+                <span class="header-user">{{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="header-auth">Chiqish</a>
+            {% else %}
+
+                <a href="{% url 'login' %}" class="header-auth">Kirish</a>
+                <a href="{% url 'register' %}" class="header-auth header-auth-strong">Ro'yxatdan o'tish</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="container footer-inner">
+        <div>
+            <a href="/" class="logo">Auto<span>Lux</span></a>
+            <p>Ishonchli mashinalar, qulay narxlar.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="/">Bosh sahifa</a>
+            <a href="/?page=1">Mashinalar</a>
+            <a href="/?section=about">Biz haqimizda</a>
+        </div>
+        <div>
+            <p>Toshkent shahri</p>
+            <p>+998 90 123 45 67</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

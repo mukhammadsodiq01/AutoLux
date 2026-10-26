@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Ro'yxatdan o'tish — AutoLux{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+    <div class="container">
+        <div class="auth-shell">
+
+            <div class="auth-copy">
+                <p class="auth-tag">Yangi hisob</p>
+                <h1>Bir necha soniyada <span>hisob yarating</span>.</h1>
+                <p>Ro'yxatdan o'ting, mashinani tanlang va onlayn xarid qiling.</p>
+                <div class="auth-points">
+                    <div><strong>6</strong><span>mashina</span></div>
+                    <div><strong>3</strong><span>kategoriya</span></div>
+                    <div><strong>24/7</strong><span>qulaylik</span></div>
+                </div>
+            </div>
+
+            <div class="auth-card">
+                <h2>Ro'yxatdan o'tish</h2>
+                <p>Yangi hisob yarating va mashina xarid qiling.</p>
+
+                <form method="post" id="registerForm">
+
+                    {% csrf_token %}
+
+                    <div class="field">
+                        <label for="{{ form.username.id_for_label }}">Foydalanuvchi nomi</label>
+                        {{ form.username }}
+                        <p class="helptext">150 belgidan oshmasin. Harflar, raqamlar va @/./+/-/_ ishlatiladi.</p>
+                        {{ form.username.errors }}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form.password1.id_for_label }}">Parol</label>
+                        <div class="password-wrap">
+                            {{ form.password1 }}
+                            <button type="button" class="password-toggle" data-target="id_password1">Ko'rsatish</button>
+                        </div>
+                        <p class="helptext">Kamida 8 belgi. Faqat raqamlardan iborat bo'lmasin.</p>
+                        {{ form.password1.errors }}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form.password2.id_for_label }}">Parolni takrorlang</label>
+                        <div class="password-wrap">
+                            {{ form.password2 }}
+                            <button type="button" class="password-toggle" data-target="id_password2">Ko'rsatish</button>
+                        </div>
+                        {{ form.password2.errors }}
+                    </div>
+
+                    {% if form.non_field_errors %}
+
+                    <div class="form-error">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <button type="submit" class="btn">Ro'yxatdan o'tish</button>
+                </form>
+
+                <p class="auth-switch">Hisobingiz bormi? <a href="{% url 'login' %}">Kirish</a></p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    const registerUsername = document.getElementById("id_username");
+    const registerPassword1 = document.getElementById("id_password1");
+    const registerPassword2 = document.getElementById("id_password2");
+    if (registerUsername) registerUsername.placeholder = "Foydalanuvchi nomi";
+    if (registerPassword1) registerPassword1.placeholder = "Parol";
+    if (registerPassword2) registerPassword2.placeholder = "Parolni takrorlang";
+
+    document.querySelectorAll(".password-toggle").forEach((button) => {
+        button.addEventListener("click", () => {
+            const input = document.getElementById(button.dataset.target);
+            if (!input) return;
+            const isHidden = input.type === "password";
+            input.type = isHidden ? "text" : "password";
+            button.textContent = isHidden ? "Yashirish" : "Ko'rsatish";
+        });
+    });
+</script>
+
+{% endblock %}

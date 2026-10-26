@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>AutoLux Backend — Savol va javob</title>
+<style>
+:root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --ink: #111827;
+    --muted: #5b6577;
+    --line: #e3e9f1;
+    --accent: #e8452c;
+    --accent-soft: #fff0eb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    line-height: 1.65;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(12px);
+}
+
+.wrap {
+    width: min(980px, 100%);
+    margin: 0 auto;
+    padding: 0 18px;
+}
+
+.header-inner {
+    padding: 18px 0 14px;
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(22px, 4vw, 30px);
+    line-height: 1.2;
+    letter-spacing: -0.4px;
+}
+
+.sub {
+    margin: 4px 0 14px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+}
+
+input {
+    width: 100%;
+    padding: 12px 78px 12px 14px;
+    border: 1px solid #d7e0eb;
+    border-radius: 12px;
+    background: #ffffff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(232, 69, 44, 0.12);
+}
+
+.clear {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    padding: 6px 9px;
+    border: 0;
+    border-radius: 8px;
+    background: #eef2f7;
+    color: #536174;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.clear:hover {
+    background: #e2e9f2;
+    color: var(--ink);
+}
+
+.count {
+    flex: 0 0 auto;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+main {
+    padding: 20px 0 50px;
+}
+
+.qa {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 12px;
+    margin: 0 0 10px;
+    padding: 15px 16px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+}
+
+.qa:hover {
+    border-color: #f0b9ad;
+}
+
+.num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.q {
+    margin: 0 0 4px;
+    font-size: 15.5px;
+    line-height: 1.45;
+}
+
+.a {
+    margin: 0;
+    color: #4b5565;
+    font-size: 14.5px;
+}
+
+code {
+    padding: 1px 5px;
+    border: 1px solid #dbe3ee;
+    border-radius: 5px;
+    background: #eef3f9;
+    color: #0b3b66;
+    font-family: Consolas, "Cascadia Code", "SFMono-Regular", monospace;
+    font-size: 0.9em;
+}
+
+.empty {
+    padding: 30px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+    background: #ffffff;
+    color: var(--muted);
+    text-align: center;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 600px) {
+    .header-inner {
+        padding: 14px 0 12px;
+    }
+
+    .count {
+        display: none;
+    }
+
+    .qa {
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 10px;
+        padding: 13px;
+    }
+
+    .num {
+        width: 30px;
+        height: 30px;
+        font-size: 11px;
+    }
+
+    .q {
+        font-size: 14.5px;
+    }
+
+    .a {
+        font-size: 13.5px;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="wrap header-inner">
+        <h1>AutoLux Backend — Savol va javob</h1>
+        <p class="sub">Faqat savol va javob. Qidiruv orqali kerakli savolni toping.</p>
+        <div class="search-row">
+            <div class="search-box">
+                <input id="search" type="search" placeholder="Savol yoki javob matnini qidiring..." autocomplete="off">
+                <button class="clear" id="clear" type="button" hidden>Tozalash</button>
+            </div>
+            <span class="count" id="count">122 ta savol</span>
+        </div>
+    </div>
+</header>
+
+<main class="wrap">
+    <div class="empty" id="empty" hidden>Hech narsa topilmadi. Boshqa so'z bilan urinib ko'ring.</div>
+    <div id="list">
+        <article class="qa" data-number="1"><div class="num">01</div><div class="body"><h2 class="q">Django'da MVT qanday ishlaydi?</h2><p class="a">Model bazadagi jadval, View so'rov mantig'i, Template HTML ko'rinish. URL dispatcher qaysi View ishlashini tanlaydi.</p></div></article><article class="qa" data-number="2"><div class="num">02</div><div class="body"><h2 class="q">So'rov qaysi tartibda o'tadi?</h2><p class="a">Brauzer → <code>avtosalon/urls.py</code> → <code>cars/urls.py</code> → View → Model/ORM → Template → brauzerga javob.</p></div></article><article class="qa" data-number="3"><div class="num">03</div><div class="body"><h2 class="q"><code>avtosalon/urls.py</code> nima qiladi?</h2><p class="a">Admin, <code>cars</code> app URL'lari va media fayllar manzillarini ulaydi.</p></div></article><article class="qa" data-number="4"><div class="num">04</div><div class="body"><h2 class="q"><code>include('cars.urls')</code> nima qiladi?</h2><p class="a"><code>cars</code> app ichidagi <code>urls.py</code> ni asosiy URL fayliga ulaydi. Shu sabab <code>/car/1/</code> kabi manzillar ishlaydi.</p></div></article><article class="qa" data-number="5"><div class="num">05</div><div class="body"><h2 class="q"><code>cars/urls.py</code> dagi <code>path()</code> nima qiladi?</h2><p class="a">URL manzilni View funksiyasiga bog'laydi va unga nom beradi.</p></div></article><article class="qa" data-number="6"><div class="num">06</div><div class="body"><h2 class="q"><code>path('car/&lt;int:id&gt;/', ...)</code> dagi <code>&lt;int:id&gt;</code> qanday ishlaydi?</h2><p class="a">URL'dan butun son oladi va View'ga <code>id</code> nomi bilan uzatadi. Son bo'lmasa URL mos kelmaydi.</p></div></article><article class="qa" data-number="7"><div class="num">07</div><div class="body"><h2 class="q">View'dagi <code>id</code> parametri qayerdan keladi?</h2><p class="a">URL konverteridan keladi. <code>car_detail(request, id)</code> dagi <code>id</code> URL'dagi songa teng bo'ladi.</p></div></article><article class="qa" data-number="8"><div class="num">08</div><div class="body"><h2 class="q"><code>name='car_detail'</code> nima uchun kerak?</h2><p class="a">URL'ga nom beradi. Template'da <code>{% url %}</code> va View'da <code>redirect()</code> shu nom orqali manzil yasaydi.</p></div></article><article class="qa" data-number="9"><div class="num">09</div><div class="body"><h2 class="q"><code>{% url 'car_detail' car.id %}</code> qanday URL yasaydi?</h2><p class="a"><code>car_detail</code> nomli URL'ni topadi va <code>car.id</code> ni qo'yib <code>/car/1/</code> kabi manzil yasaydi.</p></div></article><article class="qa" data-number="10"><div class="num">10</div><div class="body"><h2 class="q"><code>redirect('success', order_id=order.id)</code> qanday ishlaydi?</h2><p class="a"><code>success</code> nomli URL'ni topadi, <code>order_id</code> ni joylaydi va brauzerni <code>/success/20/</code> ga yo'naltiradi.</p></div></article><article class="qa" data-number="11"><div class="num">11</div><div class="body"><h2 class="q"><code>render()</code> nima qiladi?</h2><p class="a">Template'ni context bilan birlashtiradi va shu so'rovga HTML javob qaytaradi.</p></div></article><article class="qa" data-number="12"><div class="num">12</div><div class="body"><h2 class="q"><code>render(request, 'detail.html', {'car': car})</code> dagi <code>car</code> template'ga qanday yetadi?</h2><p class="a">Context dict'dagi <code>car</code> kaliti template ichida <code>car</code> nomi bilan ishlatiladi.</p></div></article><article class="qa" data-number="13"><div class="num">13</div><div class="body"><h2 class="q">Template'dagi <code>{{ car.brand }}</code> qayerdan oladi?</h2><p class="a">View yuborgan <code>car</code> obyektining <code>brand</code> maydonidan oladi.</p></div></article><article class="qa" data-number="14"><div class="num">14</div><div class="body"><h2 class="q"><code>get_object_or_404(Car, id=id)</code> ichida nima bo'ladi?</h2><p class="a">Avval <code>Car.objects.get(id=id)</code> bajariladi. Obyekt topilsa qaytadi, topilmasa 404 javob beriladi.</p></div></article><article class="qa" data-number="15"><div class="num">15</div><div class="body"><h2 class="q"><code>get_object_or_404</code> va <code>Car.objects.get()</code> farqi nima?</h2><p class="a"><code>get()</code> topilmasa <code>DoesNotExist</code> xatosi beradi. <code>get_object_or_404</code> esa foydalanuvchiga 404 qaytaradi.</p></div></article><article class="qa" data-number="16"><div class="num">16</div><div class="body"><h2 class="q"><code>redirect</code> va <code>render</code> farqi nima?</h2><p class="a"><code>render</code> shu so'rovga HTML qaytaradi. <code>redirect</code> brauzerni boshqa URL'ga 302 bilan yuboradi.</p></div></article><article class="qa" data-number="17"><div class="num">17</div><div class="body"><h2 class="q"><code>home</code> View'da <code>request.GET.get('q', '')</code> nima qiladi?</h2><p class="a">URL'dagi <code>q</code> parametrini oladi. Parametr bo'lmasa bo'sh matn qaytaradi.</p></div></article><article class="qa" data-number="18"><div class="num">18</div><div class="body"><h2 class="q"><code>?q=bmw</code> qanday qilib <code>query</code>ga aylanadi?</h2><p class="a"><code>request.GET</code> ichida <code>q</code> kaliti <code>bmw</code> bo'ladi va <code>query = 'bmw'</code> bo'ladi.</p></div></article><article class="qa" data-number="19"><div class="num">19</div><div class="body"><h2 class="q"><code>cars.filter(name__icontains=query) | cars.filter(brand__icontains=query)</code> nima qiladi?</h2><p class="a">Nomida yoki brandida <code>query</code> bo'lgan mashinalarni topadi. <code>icontains</code> katta-kichik harfga qaramaydi.</p></div></article><article class="qa" data-number="20"><div class="num">20</div><div class="body"><h2 class="q"><code>|</code> operatori SQL'da nimaga aylanadi?</h2><p class="a">Ikki QuerySet'ni OR bilan birlashtiradi. SQL'da taxminan <code>WHERE name LIKE ... OR brand LIKE ...</code> bo'ladi.</p></div></article><article class="qa" data-number="21"><div class="num">21</div><div class="body"><h2 class="q"><code>category_id.isdigit()</code> nima uchun kerak?</h2><p class="a">Kategoriya parametri faqat raqam bo'lsa filter qilish uchun. Matn kelsa e'tiborsiz qoldiriladi.</p></div></article><article class="qa" data-number="22"><div class="num">22</div><div class="body"><h2 class="q"><code>cars.filter(category_id=category_id)</code> qanday ishlaydi?</h2><p class="a"><code>Car</code> jadvalidagi <code>category_id</code> ustuni bo'yicha filtrlaydi. <code>Category</code> obyekti emas, uning ID'si beriladi.</p></div></article><article class="qa" data-number="23"><div class="num">23</div><div class="body"><h2 class="q"><code>active_category</code> nima uchun kerak?</h2><p class="a">Template'da tanlangan kategoriyani active qilish uchun. <code>0</code> bo'lsa barchasi tanlangan.</p></div></article><article class="qa" data-number="24"><div class="num">24</div><div class="body"><h2 class="q"><code>Category.objects.all()</code> qayerda ishlatiladi?</h2><p class="a">Bosh sahifadagi kategoriya linklarini chiqarish uchun context'ga yuboriladi.</p></div></article><article class="qa" data-number="25"><div class="num">25</div><div class="body"><h2 class="q"><code>Paginator(cars, 3)</code> nima qiladi?</h2><p class="a">Mashinalar ro'yxatini har sahifada 3 tadan qilib bo'ladi.</p></div></article><article class="qa" data-number="26"><div class="num">26</div><div class="body"><h2 class="q"><code>get_page(request.GET.get('page'))</code> nima qiladi?</h2><p class="a">Sahifa raqamini xavfsiz oladi. Noto'g'ri yoki bo'sh bo'lsa birinchi sahifani beradi.</p></div></article><article class="qa" data-number="27"><div class="num">27</div><div class="body"><h2 class="q"><code>page_obj</code> nima va template'da nima beradi?</h2><p class="a">Joriy sahifa obyekti. U orqali mashinalar, oldingi/keyingi sahifa va umumiy sahifa soni olinadi.</p></div></article><article class="qa" data-number="28"><div class="num">28</div><div class="body"><h2 class="q">Pagination linklarida <code>q</code> va <code>category</code> nima uchun saqlanadi?</h2><p class="a">Sahifa almashganda qidiruv va kategoriya yo'qolmasligi uchun. Ular har bir linkka qo'shiladi.</p></div></article><article class="qa" data-number="29"><div class="num">29</div><div class="body"><h2 class="q"><code>page_obj.has_previous</code> va <code>has_next</code> nima qiladi?</h2><p class="a">Oldingi yoki keyingi sahifa bor-yo'qligini tekshiradi. Template shunga qarab link yoki disabled yozadi.</p></div></article><article class="qa" data-number="30"><div class="num">30</div><div class="body"><h2 class="q"><code>page_obj.paginator.page_range</code> nima?</h2><p class="a">Barcha sahifa raqamlari ro'yxati. Template undan 1, 2, 3 kabi tugmalar yasaydi.</p></div></article><article class="qa" data-number="31"><div class="num">31</div><div class="body"><h2 class="q"><code>cars</code> context'iga <code>page_obj</code> berilgani nima uchun?</h2><p class="a">Template'dagi <code>{% for car in cars %}</code> joriy sahifadagi mashinalarni olishi uchun.</p></div></article><article class="qa" data-number="32"><div class="num">32</div><div class="body"><h2 class="q"><code>{% for car in cars %}</code> qanday ishlaydi?</h2><p class="a"><code>cars</code> aslida <code>page_obj</code>. U iteratsiya qilinib, har bir mashina <code>car</code> bo'ladi.</p></div></article><article class="qa" data-number="33"><div class="num">33</div><div class="body"><h2 class="q"><code>{% empty %}</code> nima qiladi?</h2><p class="a">Ro'yxat bo'sh bo'lsa, for loop o'rniga uning ichidagi matnni chiqaradi.</p></div></article><article class="qa" data-number="34"><div class="num">34</div><div class="body"><h2 class="q"><code>active_category == category.id</code> qanday taqqoslanadi?</h2><p class="a">Ikkalasi ham butun son. Teng bo'lsa template o'sha kategoriya linkiga <code>active</code> class qo'shadi.</p></div></article><article class="qa" data-number="35"><div class="num">35</div><div class="body"><h2 class="q"><code>?category={{ category.id }}</code> qanday ishlaydi?</h2><p class="a">Har bir kategoriya linki o'z ID'sini GET parametr sifatida yuboradi. View uni <code>category_id</code> deb oladi.</p></div></article><article class="qa" data-number="36"><div class="num">36</div><div class="body"><h2 class="q"><code>@login_required</code> qanday ishlaydi?</h2><p class="a">User login bo'lmasa, uni <code>LOGIN_URL</code> ga <code>next</code> parametri bilan yo'naltiradi.</p></div></article><article class="qa" data-number="37"><div class="num">37</div><div class="body"><h2 class="q">Login qilmagan user payment'ga kirsa nima bo'ladi?</h2><p class="a">302 javob bilan <code>/login/?next=/payment/1/</code> manziliga yuboriladi.</p></div></article><article class="qa" data-number="38"><div class="num">38</div><div class="body"><h2 class="q"><code>LOGIN_URL = 'login'</code> qanday bog'lanadi?</h2><p class="a"><code>login_required</code> aynan shu nomdagi URL'ni topib, login sahifasiga yuboradi.</p></div></article><article class="qa" data-number="39"><div class="num">39</div><div class="body"><h2 class="q"><code>next</code> parametri qayerdan keladi?</h2><p class="a"><code>login_required</code> qo'shadi. Login template esa uni hidden input qilib POST'ga yuboradi.</p></div></article><article class="qa" data-number="40"><div class="num">40</div><div class="body"><h2 class="q"><code>login_view</code>da <code>next_url</code> qanday olinadi?</h2><p class="a">Avval POST'dagi <code>next</code>, bo'lmasa GET'dagi <code>next</code> olinadi. <code>or</code> operatori shuni ta'minlaydi.</p></div></article><article class="qa" data-number="41"><div class="num">41</div><div class="body"><h2 class="q"><code>next_url.startswith('/') and not next_url.startswith('//')</code> nima uchun?</h2><p class="a">Faqat sayt ichidagi manzilga qaytish uchun. <code>//boshqa-sayt</code> bo'lsa tashqi saytga ketmasin.</p></div></article><article class="qa" data-number="42"><div class="num">42</div><div class="body"><h2 class="q"><code>AuthenticationForm(request, data=request.POST)</code> nima qiladi?</h2><p class="a">Username va parolni qabul qilib, ularni Django user bazasi bilan tekshiradi.</p></div></article><article class="qa" data-number="43"><div class="num">43</div><div class="body"><h2 class="q"><code>form.get_user()</code> nima qaytaradi?</h2><p class="a">Autentifikatsiyadan o'tgan User obyektini qaytaradi.</p></div></article><article class="qa" data-number="44"><div class="num">44</div><div class="body"><h2 class="q"><code>auth_login(request, form.get_user())</code> nima qiladi?</h2><p class="a">Userni session'ga yozadi. Shundan keyin <code>request.user</code> o'sha user bo'ladi.</p></div></article><article class="qa" data-number="45"><div class="num">45</div><div class="body"><h2 class="q">Session qanday saqlanadi?</h2><p class="a">Session ma'lumoti serverda saqlanadi, brauzerda esa <code>sessionid</code> cookie bo'ladi.</p></div></article><article class="qa" data-number="46"><div class="num">46</div><div class="body"><h2 class="q"><code>auth_logout(request)</code> nima qiladi?</h2><p class="a">Session'ni tozalaydi va userni tizimdan chiqaradi.</p></div></article><article class="qa" data-number="47"><div class="num">47</div><div class="body"><h2 class="q"><code>UserCreationForm(request.POST)</code> nima qiladi?</h2><p class="a">Yangi user uchun username va ikki marta parolni qabul qiladi, parol qoidalarini tekshiradi.</p></div></article><article class="qa" data-number="48"><div class="num">48</div><div class="body"><h2 class="q"><code>form.is_valid()</code> nima qiladi?</h2><p class="a">Forma maydonlari va validatorlarni tekshiradi. Hammasi to'g'ri bo'lsa <code>True</code> qaytaradi.</p></div></article><article class="qa" data-number="49"><div class="num">49</div><div class="body"><h2 class="q"><code>form.save()</code> parolni qanday saqlaydi?</h2><p class="a">User yaratadi va parolni ochiq matnda emas, hash ko'rinishida saqlaydi.</p></div></article><article class="qa" data-number="50"><div class="num">50</div><div class="body"><h2 class="q"><code>@never_cache</code> nima qiladi?</h2><p class="a">Login va register sahifalarini brauzer cache qilmasligini ta'minlaydi. Eskirgan CSRF token oldini oladi.</p></div></article><article class="qa" data-number="51"><div class="num">51</div><div class="body"><h2 class="q"><code>{% csrf_token %}</code> nima qiladi?</h2><p class="a">Formaga yashirin CSRF token input qo'shadi.</p></div></article><article class="qa" data-number="52"><div class="num">52</div><div class="body"><h2 class="q">CSRF token qayerda tekshiriladi?</h2><p class="a"><code>CsrfViewMiddleware</code> POST so'rovida formadagi token va cookie'dagi tokenni solishtiradi.</p></div></article><article class="qa" data-number="53"><div class="num">53</div><div class="body"><h2 class="q">CSRF token bo'lmasa nima bo'ladi?</h2><p class="a">Django 403 javob qaytaradi: CSRF verification failed.</p></div></article><article class="qa" data-number="54"><div class="num">54</div><div class="body"><h2 class="q"><code>request.method == 'POST'</code> nima uchun kerak?</h2><p class="a">Forma yuborilganini GET sahifa ochilishidan ajratish uchun.</p></div></article><article class="qa" data-number="55"><div class="num">55</div><div class="body"><h2 class="q">Payment'da GET va POST farqi nima?</h2><p class="a">GET'da faqat to'lov formasi ko'rsatiladi. POST'da ma'lumotlar tekshiriladi va order yaratiladi.</p></div></article><article class="qa" data-number="56"><div class="num">56</div><div class="body"><h2 class="q"><code>full_name = ' '.join(request.POST.get('full_name', '').split())</code> nima qiladi?</h2><p class="a">Ism-familiyadagi ortiqcha bo'shliqlarni olib tashlaydi va so'zlar orasida bitta probel qoldiradi.</p></div></article><article class="qa" data-number="57"><div class="num">57</div><div class="body"><h2 class="q"><code>clean_name = full_name.replace(' ', '').replace("'", '').replace('-', '')</code> nima uchun?</h2><p class="a">Probel, apostrof va defisni olib tashlab, qolgan belgilar faqat harf ekanini tekshirish uchun.</p></div></article><article class="qa" data-number="58"><div class="num">58</div><div class="body"><h2 class="q"><code>clean_name.isalpha()</code> nimani tekshiradi?</h2><p class="a">Matn faqat harflardan iboratligini. Raqam yoki boshqa belgi bo'lsa <code>False</code> bo'ladi.</p></div></article><article class="qa" data-number="59"><div class="num">59</div><div class="body"><h2 class="q"><code>phone.isdigit()</code> va <code>len(phone) == 13</code> nima uchun ikkalasi?</h2><p class="a">Biri faqat raqamligini, ikkinchisi uzunligi 13 ekanini tekshiradi. Ikkalasi birga kerak.</p></div></article><article class="qa" data-number="60"><div class="num">60</div><div class="body"><h2 class="q">Model'dagi <code>max_length=13</code> yetarlimi?</h2><p class="a">Yo'q. U faqat uzunlik chegarasi. 13 ta raqamligini View'dagi <code>isdigit()</code> va <code>len()</code> tekshiradi.</p></div></article><article class="qa" data-number="61"><div class="num">61</div><div class="body"><h2 class="q"><code>card_number.isdigit()</code> va <code>len(card_number) == 16</code> qayerda?</h2><p class="a"><code>payment</code> View'ida. Karta faqat raqam va 16 xonali bo'lsa order yaratiladi.</p></div></article><article class="qa" data-number="62"><div class="num">62</div><div class="body"><h2 class="q">Xatolar qanday qilib <code>payment.html</code> ga chiqadi?</h2><p class="a">View <code>errors</code> ro'yxatini context'ga beradi. Template <code>{% for error in errors %}</code> bilan chiqaradi.</p></div></article><article class="qa" data-number="63"><div class="num">63</div><div class="body"><h2 class="q">Xato bo'lsa kiritilgan qiymatlar qanday saqlanadi?</h2><p class="a">View <code>full_name</code>, <code>phone</code>, <code>card_number</code> ni context'ga qaytaradi. Template ularni input <code>value</code> ga qo'yadi.</p></div></article><article class="qa" data-number="64"><div class="num">64</div><div class="body"><h2 class="q"><code>Order.objects.create(car=car, ...)</code> nima qiladi?</h2><p class="a">Bazaga yangi order yozadi. <code>car</code> ForeignKey'ga mashinani bog'laydi va order obyektini qaytaradi.</p></div></article><article class="qa" data-number="65"><div class="num">65</div><div class="body"><h2 class="q"><code>car=car</code> ForeignKey'ga nimani yozadi?</h2><p class="a">Django <code>car.id</code> ni <code>car_id</code> ustuniga yozadi. Bog'lanish ID orqali saqlanadi.</p></div></article><article class="qa" data-number="66"><div class="num">66</div><div class="body"><h2 class="q"><code>order.id</code> qayerdan keladi?</h2><p class="a">Bazadagi avtomatik primary key'dan. <code>create()</code> order yaratilgach uning ID'sini qaytaradi.</p></div></article><article class="qa" data-number="67"><div class="num">67</div><div class="body"><h2 class="q"><code>redirect('success', order_id=order.id)</code> URL'ni qanday yasaydi?</h2><p class="a"><code>success</code> URL nomini topadi va <code>order_id</code> parametrini qo'yib <code>/success/20/</code> yasaydi.</p></div></article><article class="qa" data-number="68"><div class="num">68</div><div class="body"><h2 class="q"><code>success</code> View'da order qanday topiladi?</h2><p class="a"><code>get_object_or_404(Order, id=order_id)</code> orqali. Topilmasa 404 bo'ladi.</p></div></article><article class="qa" data-number="69"><div class="num">69</div><div class="body"><h2 class="q"><code>success.html</code> da <code>order.car.brand</code> qanday ishlaydi?</h2><p class="a">Order'dagi <code>car</code> ForeignKey orqali bog'langan Car olinadi, undan <code>brand</code> maydoni o'qiladi.</p></div></article><article class="qa" data-number="70"><div class="num">70</div><div class="body"><h2 class="q"><code>order.card_number|slice:'-4:'</code> nima qiladi?</h2><p class="a">Karta raqamining oxirgi 4 ta raqamini oladi. Chekda qolgan raqamlar yulduzcha bilan yashiriladi.</p></div></article><article class="qa" data-number="71"><div class="num">71</div><div class="body"><h2 class="q"><code>order.created_at|date:'d.m.Y H:i'</code> nima qiladi?</h2><p class="a">Buyurtma yaratilgan sanani <code>kun.oy.yil soat:daqiqa</code> ko'rinishida chiqaradi.</p></div></article><article class="qa" data-number="72"><div class="num">72</div><div class="body"><h2 class="q"><code>success</code> xavfsizligida qanday muammo bor?</h2><p class="a">Order'da <code>user</code> maydoni yo'q. Login qilgan har qanday user boshqa order ID'sini ochishi mumkin.</p></div></article><article class="qa" data-number="73"><div class="num">73</div><div class="body"><h2 class="q"><code>success</code> ni userga bog'lash uchun nima qilish kerak?</h2><p class="a"><code>Order</code>ga <code>user = ForeignKey(User)</code> qo'shib, <code>success</code>da <code>Order.objects.get(id=order_id, user=request.user)</code> ishlatish kerak.</p></div></article><article class="qa" data-number="74"><div class="num">74</div><div class="body"><h2 class="q"><code>Car.category</code> ForeignKey qanday bog'lanadi?</h2><p class="a"><code>Car</code> jadvalida <code>category_id</code> ustuni yaratiladi. U <code>Category</code> jadvalidagi ID'ga bog'lanadi.</p></div></article><article class="qa" data-number="75"><div class="num">75</div><div class="body"><h2 class="q"><code>Car.category</code> va <code>category_id</code> farqi nima?</h2><p class="a"><code>car.category</code> Category obyektini beradi. <code>car.category_id</code> esa faqat ID raqamini beradi.</p></div></article><article class="qa" data-number="76"><div class="num">76</div><div class="body"><h2 class="q"><code>on_delete=SET_NULL</code> nima qiladi?</h2><p class="a">Kategoriya o'chirilganda mashina o'chmaydi, uning <code>category</code> maydoni <code>NULL</code> bo'ladi.</p></div></article><article class="qa" data-number="77"><div class="num">77</div><div class="body"><h2 class="q"><code>Order.car</code> dagi <code>CASCADE</code> nima qiladi?</h2><p class="a">Mashina o'chirilsa, unga bog'langan orderlar ham avtomatik o'chadi.</p></div></article><article class="qa" data-number="78"><div class="num">78</div><div class="body"><h2 class="q"><code>Car</code> o'chsa <code>Order</code>larga nima bo'ladi?</h2><p class="a"><code>CASCADE</code> sababli o'sha mashinaga tegishli barcha orderlar ham o'chadi.</p></div></article><article class="qa" data-number="79"><div class="num">79</div><div class="body"><h2 class="q"><code>Category</code> o'chsa <code>Car</code>larga nima bo'ladi?</h2><p class="a"><code>SET_NULL</code> sababli mashinalar qoladi, faqat <code>category</code> maydoni bo'sh bo'ladi.</p></div></article><article class="qa" data-number="80"><div class="num">80</div><div class="body"><h2 class="q"><code>Car.year</code> nega <code>DateField</code>?</h2><p class="a">Teacher model maydonlarini ma'nosiga moslashtirishni aytgan. Yil sanasi <code>YYYY-01-01</code> ko'rinishida saqlanadi.</p></div></article><article class="qa" data-number="81"><div class="num">81</div><div class="body"><h2 class="q"><code>{{ car.year|date:'Y' }}</code> nima qiladi?</h2><p class="a"><code>DateField</code>dagi sanadan faqat yilni chiqaradi. Foydalanuvchi <code>2021</code> ko'radi.</p></div></article><article class="qa" data-number="82"><div class="num">82</div><div class="body"><h2 class="q"><code>ImageField(upload_to='cars/')</code> faylni qayerga saqlaydi?</h2><p class="a"><code>MEDIA_ROOT</code> ichidagi <code>cars/</code> papkasiga saqlaydi.</p></div></article><article class="qa" data-number="83"><div class="num">83</div><div class="body"><h2 class="q"><code>car.image.url</code> qanday URL beradi?</h2><p class="a"><code>MEDIA_URL</code> va fayl yo'lini birlashtirib <code>/media/cars/rasm.jpg</code> kabi manzil beradi.</p></div></article><article class="qa" data-number="84"><div class="num">84</div><div class="body"><h2 class="q"><code>MEDIA_URL</code> va <code>MEDIA_ROOT</code> qanday bog'lanadi?</h2><p class="a"><code>MEDIA_URL</code> brauzerdagi manzil prefiksi, <code>MEDIA_ROOT</code> esa diskdagi papka.</p></div></article><article class="qa" data-number="85"><div class="num">85</div><div class="body"><h2 class="q"><code>avtosalon/urls.py</code> dagi <code>static(...)</code> nima qiladi?</h2><p class="a">Development rejimida <code>/media/...</code> so'rovlarini <code>MEDIA_ROOT</code> ichidagi fayllarga ulaydi.</p></div></article><article class="qa" data-number="86"><div class="num">86</div><div class="body"><h2 class="q"><code>makemigrations</code> modeldan qanday xabar topadi?</h2><p class="a">Joriy modellarni oxirgi migration bilan solishtiradi va farqni yangi migration fayliga yozadi.</p></div></article><article class="qa" data-number="87"><div class="num">87</div><div class="body"><h2 class="q"><code>migrate</code> bazada nima qiladi?</h2><p class="a">Migration fayllaridagi jadval va ustun o'zgarishlarini bazaga qo'llaydi.</p></div></article><article class="qa" data-number="88"><div class="num">88</div><div class="body"><h2 class="q"><code>INSTALLED_APPS</code> ga <code>cars</code> qo'shilmasa nima bo'ladi?</h2><p class="a">Django app modellari, template'lari va migration'larini to'liq topa olmaydi.</p></div></article><article class="qa" data-number="89"><div class="num">89</div><div class="body"><h2 class="q"><code>TEMPLATES</code> dagi <code>APP_DIRS=True</code> nima qiladi?</h2><p class="a">Har bir app ichidagi <code>templates/</code> papkasidan HTML fayllarni avtomatik qidiradi.</p></div></article><article class="qa" data-number="90"><div class="num">90</div><div class="body"><h2 class="q"><code>ROOT_URLCONF</code> nima qiladi?</h2><p class="a">Django'ga asosiy URL fayli qaysi ekanini aytadi. Bizda <code>avtosalon.urls</code>.</p></div></article><article class="qa" data-number="91"><div class="num">91</div><div class="body"><h2 class="q"><code>DATABASES</code> va <code>db.sqlite3</code> qanday bog'lanadi?</h2><p class="a"><code>DATABASES</code> sozlamasida SQLite engine va <code>db.sqlite3</code> fayl yo'li ko'rsatilgan.</p></div></article><article class="qa" data-number="92"><div class="num">92</div><div class="body"><h2 class="q"><code>admin.site.register</code> nima qiladi?</h2><p class="a">Modelni admin panelga ulaydi. Shundan keyin <code>/admin/</code> da CRUD qilish mumkin.</p></div></article><article class="qa" data-number="93"><div class="num">93</div><div class="body"><h2 class="q"><code>__str__</code> admin'da nima uchun kerak?</h2><p class="a">Admin ro'yxatida obyekt nomini chiroyli ko'rsatadi. Masalan, <code>BMW X5</code>.</p></div></article><article class="qa" data-number="94"><div class="num">94</div><div class="body"><h2 class="q"><code>base.html</code> va <code>home.html</code> qanday bog'lanadi?</h2><p class="a"><code>home.html</code> <code>{% extends 'base.html' %}</code> bilan asosiy shablonni meros oladi.</p></div></article><article class="qa" data-number="95"><div class="num">95</div><div class="body"><h2 class="q"><code>{% extends %}</code> va <code>{% block %}</code> qanday ishlaydi?</h2><p class="a"><code>extends</code> shablonni meros oladi, <code>block</code> esa uning ichidagi almashtiriladigan qismini belgilaydi.</p></div></article><article class="qa" data-number="96"><div class="num">96</div><div class="body"><h2 class="q"><code>{% load humanize %}</code> nima qiladi?</h2><p class="a"><code>intcomma</code> kabi humanize filtrlarni template'da ishlatishga ruxsat beradi.</p></div></article><article class="qa" data-number="97"><div class="num">97</div><div class="body"><h2 class="q"><code>intcomma</code> nima qiladi?</h2><p class="a">Sonni mingliklarga ajratadi: <code>95000</code> → <code>95,000</code>.</p></div></article><article class="qa" data-number="98"><div class="num">98</div><div class="body"><h2 class="q"><code>{% if user.is_authenticated %}</code> qayerdan <code>user</code> oladi?</h2><p class="a"><code>django.contrib.auth.context_processors.auth</code> context processor'i <code>request.user</code> ni template'ga beradi.</p></div></article><article class="qa" data-number="99"><div class="num">99</div><div class="body"><h2 class="q"><code>{% url 'logout' %}</code> nima qiladi?</h2><p class="a"><code>logout</code> nomli URL'ni topib, <code>/logout/</code> manzilini yasaydi.</p></div></article><article class="qa" data-number="100"><div class="num">100</div><div class="body"><h2 class="q"><code>home.html</code> dagi <code>action='/' method='get'</code> qanday ishlaydi?</h2><p class="a">Forma <code>/</code> manziliga GET so'rov yuboradi. <code>q</code> input qiymati URL'ga qo'shiladi.</p></div></article><article class="qa" data-number="101"><div class="num">101</div><div class="body"><h2 class="q"><code>name='q'</code> va <code>request.GET.get('q', '')</code> qanday bog'lanadi?</h2><p class="a">Input <code>name='q'</code> bo'lgani uchun URL'da <code>?q=...</code> paydo bo'ladi. View shu kalitni o'qiydi.</p></div></article><article class="qa" data-number="102"><div class="num">102</div><div class="body"><h2 class="q"><code>LOGIN_REDIRECT_URL</code> va <code>LOGOUT_REDIRECT_URL</code> hozir ishlatilyaptimi?</h2><p class="a">Hozir custom <code>login_view</code> va <code>logout_view</code> ishlatilgani uchun amalda ular o'zi redirect qiladi. Bu sozlamalar built-in view'lar uchun zaxira.</p></div></article><article class="qa" data-number="103"><div class="num">103</div><div class="body"><h2 class="q">QuerySet lazy degani nima?</h2><p class="a">QuerySet yaratilganda SQL darhol bajarilmaydi. Uni iteratsiya qilganda yoki <code>len()</code>, <code>list()</code> chaqirganda bajariladi.</p></div></article><article class="qa" data-number="104"><div class="num">104</div><div class="body"><h2 class="q"><code>get()</code> va <code>filter().first()</code> farqi nima?</h2><p class="a"><code>get()</code> bitta natija talab qiladi, topilmasa xato beradi. <code>filter().first()</code> topilmasa <code>None</code> qaytaradi.</p></div></article><article class="qa" data-number="105"><div class="num">105</div><div class="body"><h2 class="q"><code>Order.objects.create()</code> va <code>Order(...).save()</code> farqi nima?</h2><p class="a">Ikkalasi ham bazaga yozadi. <code>create()</code> obyektni yaratib darhol saqlaydi va qaytaradi.</p></div></article><article class="qa" data-number="106"><div class="num">106</div><div class="body"><h2 class="q"><code>null=True</code> va <code>blank=True</code> farqi nima?</h2><p class="a"><code>null=True</code> bazada NULL bo'lishiga ruxsat beradi. <code>blank=True</code> forma/admin'da bo'sh qoldirishga ruxsat beradi.</p></div></article><article class="qa" data-number="107"><div class="num">107</div><div class="body"><h2 class="q"><code>DateTimeField(auto_now_add=True)</code> qachon yozadi?</h2><p class="a">Obyekt birinchi marta yaratilganda vaqtni avtomatik yozadi. Keyingi o'zgarishlarda o'zgarmaydi.</p></div></article><article class="qa" data-number="108"><div class="num">108</div><div class="body"><h2 class="q"><code>Order</code>da <code>user</code> bo'lsa qanday foyda?</h2><p class="a">Buyurtma kimga tegishli ekanini bilish, foydalanuvchi tarixini ko'rsatish va boshqa userning chekini ochishning oldini olish.</p></div></article><article class="qa" data-number="109"><div class="num">109</div><div class="body"><h2 class="q"><code>success</code> ni userga bog'lash kodi qanday bo'ladi?</h2><p class="a"><code>Order</code>ga <code>user = models.ForeignKey(User, on_delete=models.CASCADE)</code> qo'shib, <code>success</code>da <code>get_object_or_404(Order, id=order_id, user=request.user)</code> yozish kerak.</p></div></article><article class="qa" data-number="110"><div class="num">110</div><div class="body"><h2 class="q"><code>payment</code> View'da <code>car</code> ni qayta olish nima uchun?</h2><p class="a">URL'dagi <code>id</code> bo'yicha haqiqiy mashinani topish va mavjud bo'lmagan ID uchun 404 berish uchun.</p></div></article><article class="qa" data-number="111"><div class="num">111</div><div class="body"><h2 class="q"><code>request.POST.get('full_name', '')</code> nima uchun default?</h2><p class="a">Maydon yuborilmasa <code>None</code> emas, bo'sh matn olish uchun. Keyingi <code>split()</code> xato bermaydi.</p></div></article><article class="qa" data-number="112"><div class="num">112</div><div class="body"><h2 class="q"><code>strip()</code> nima qiladi?</h2><p class="a">Matn boshidagi va oxiridagi bo'shliqlarni olib tashlaydi.</p></div></article><article class="qa" data-number="113"><div class="num">113</div><div class="body"><h2 class="q"><code>errors</code> list qanday ishlaydi?</h2><p class="a">Har bir xato <code>errors.append(...)</code> bilan qo'shiladi. Oxirida bo'sh bo'lmasa forma qayta chiqariladi.</p></div></article><article class="qa" data-number="114"><div class="num">114</div><div class="body"><h2 class="q"><code>render</code> qayta chaqirilganda form qiymatlari qanday saqlanadi?</h2><p class="a">View kiritilgan qiymatlarni context'ga qaytaradi, template ularni input <code>value</code> ga qo'yadi.</p></div></article><article class="qa" data-number="115"><div class="num">115</div><div class="body"><h2 class="q"><code>DEBUG=True</code> bo'lsa xatolar qanday ko'rinadi?</h2><p class="a">Batafsil traceback va sozlamalar ko'rinadi. Production'da <code>DEBUG=False</code> bo'lishi shart.</p></div></article><article class="qa" data-number="116"><div class="num">116</div><div class="body"><h2 class="q"><code>ALLOWED_HOSTS</code> productionda nima uchun kerak?</h2><p class="a">Qaysi domen nomlari bilan saytga murojaat qilish mumkinligini cheklaydi.</p></div></article><article class="qa" data-number="117"><div class="num">117</div><div class="body"><h2 class="q"><code>SECRET_KEY</code> nima uchun kerak?</h2><p class="a">Session, CSRF va boshqa imzolar uchun maxfiy kalit. Uni kodda ochiq qoldirish production'da xavfli.</p></div></article><article class="qa" data-number="118"><div class="num">118</div><div class="body"><h2 class="q"><code>STATIC_URL</code> va <code>MEDIA_URL</code> farqi nima?</h2><p class="a"><code>STATIC_URL</code> CSS, JS, logo kabi kod fayllari uchun. <code>MEDIA_URL</code> foydalanuvchi yuklagan rasmlar uchun.</p></div></article><article class="qa" data-number="119"><div class="num">119</div><div class="body"><h2 class="q"><code>404</code> va <code>403</code> farqi nima?</h2><p class="a">404 — obyekt yoki sahifa topilmadi. 403 — topildi, lekin ruxsat yo'q.</p></div></article><article class="qa" data-number="120"><div class="num">120</div><div class="body"><h2 class="q"><code>urlpatterns</code> tartibi muhimmi?</h2><p class="a">Ha. Django birinchi mos kelgan URL'ni ishlatadi. Aniq manzillar umumiy manzillardan oldin turishi kerak.</p></div></article><article class="qa" data-number="121"><div class="num">121</div><div class="body"><h2 class="q"><code>name</code> va URL path farqi nima?</h2><p class="a">Path — brauzerdagi manzil. <code>name</code> — shu manzilning kod ichidagi nomi; <code>{% url %}</code> va <code>redirect</code> uchun.</p></div></article><article class="qa" data-number="122"><div class="num">122</div><div class="body"><h2 class="q"><code>reverse()</code> va <code>{% url %}</code> farqi nima?</h2><p class="a"><code>reverse()</code> Python kodida URL yasaydi. <code>{% url %}</code> template ichida xuddi shu ishni qiladi.</p></div></article>
+    </div>
+</main>
+
+<script>
+const input = document.getElementById("search");
+const clear = document.getElementById("clear");
+const count = document.getElementById("count");
+const empty = document.getElementById("empty");
+const cards = Array.from(document.querySelectorAll(".qa"));
+
+function filterQuestions() {
+    const query = input.value.trim().toLowerCase();
+    let visible = 0;
+
+    cards.forEach((card) => {
+        const show = !query || card.textContent.toLowerCase().includes(query);
+        card.hidden = !show;
+        if (show) visible += 1;
+    });
+
+    count.textContent = visible + " ta savol";
+    clear.hidden = !query;
+    empty.hidden = visible !== 0;
+}
+
+input.addEventListener("input", filterQuestions);
+
+clear.addEventListener("click", () => {
+    input.value = "";
+    filterQuestions();
+    input.focus();
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "/" && document.activeElement !== input) {
+        event.preventDefault();
+        input.focus();
+    }
+    if (event.key === "Escape" && document.activeElement === input) {
+        input.value = "";
+        filterQuestions();
+    }
+});
+
+filterQuestions();
+</script>
+
+</body>
+</html>

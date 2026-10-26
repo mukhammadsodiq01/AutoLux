@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{{ car.brand }} {{ car.name }} — AutoLux{% endblock %}
+
+{% block content %}
+
+<section class="page">
+    <div class="container">
+
+        <a href="/" class="back-link">← Bosh sahifaga qaytish</a>
+
+        <div class="detail-grid">
+
+            <div class="detail-image">
+                <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.name }}">
+            </div>
+
+            <div class="detail-info">
+                <p class="detail-brand">{{ car.brand }}</p>
+                <h1>{{ car.name }}</h1>
+
+                <div class="detail-specs">
+                    <div class="spec">
+                        <span>Ishlab chiqarilgan yil</span>
+                        <strong>{{ car.year|date:"Y" }}</strong>
+                    </div>
+                    <div class="spec">
+                        <span>Yurgan masofasi</span>
+                        <strong>{{ car.mileage|intcomma }} km</strong>
+                    </div>
+                    <div class="spec">
+                        <span>Yonilg'i turi</span>
+                        <strong>{{ car.fuel }}</strong>
+                    </div>
+
+                    <div class="spec">
+                        <span>Kategoriya</span>
+                        <strong>{% if car.category %}{{ car.category.name }}{% else %}—{% endif %}</strong>
+                    </div>
+                </div>
+
+                <p class="detail-price">$ {{ car.price|intcomma }}</p>
+                <p class="detail-text">{{ car.description }}</p>
+
+                <a href="{% url 'payment' car.id %}" class="btn">Sotib olish</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
